@@ -1,7 +1,8 @@
-﻿#include <iostream>
+#include <iostream>
 #include <corecrt_io.h>
 #include <sstream>
 #include<Windows.h>
+#include <fstream>
 using namespace std;
 
 void GetAllFilesAtPath(string Path);
@@ -12,6 +13,7 @@ void GreenColor();
 void BlueColor();
 bool DeleteFileOrFolder(const std::string& path);
 bool MarkFileOrFolderForDeletion(const std::string& path);
+void ReadFile(string path);
 
 int main()
 {
@@ -73,6 +75,19 @@ int main()
                 DefaultColor();
             }
             break;
+        case 4:
+            cin.get();
+            cout << "Path:_________________________________\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b";
+            getline(cin, Path);
+            RedColor();
+            cout << "--------------------------------------------------------------------------------------\n";
+            DefaultColor();
+            ReadFile(Path);
+            RedColor();
+            cout << "--------------------------------------------------------------------------------------\n";
+            DefaultColor();
+            cin.get();
+            break;
         default:
             break;
         }
@@ -113,6 +128,7 @@ void Menu()
     cout << "#1:Get all files at path.\n";
     cout << "#2:Delete files.\n";
     cout << "#3:System-level deletion (effective on next reboot).\n";
+    cout << "#4:Read file.\n";
     cout << "#000:Exit\n";
     cout << "-----------------------------\n";
     cout << "Enter a number:";
@@ -175,4 +191,19 @@ bool DeleteFileOrFolder(const std::string& path) {
 bool MarkFileOrFolderForDeletion(const std::string& path) {
     // 使用 MoveFileEx 将文件/文件夹标记为系统重启时删除
     return MoveFileEx(path.c_str(), nullptr, MOVEFILE_DELAY_UNTIL_REBOOT);
+}
+
+void ReadFile(string path)
+{
+    std::ifstream inputFile(path);  // 打开文件
+    if (!inputFile) {
+        std::cerr << "Can't Open file!" << std::endl;
+    }
+
+    std::string line;
+    while (std::getline(inputFile, line)) {  // 按行读取文件内容
+        std::cout << line << std::endl;  // 打印每一行内容
+    }
+
+    inputFile.close();  // 关闭文件
 }
